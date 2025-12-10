@@ -1,0 +1,31 @@
+@startuml Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Системный контекст: Взаимодействие с внешними сервисами
+
+Person(user, "Пользователь (собственник)", "Авторизуется через мобильное приложение или веб")
+
+System_Boundary(internal, "Внутренняя экосистема") {
+    Container(tenant_intercom, "tenant-intercom-app", "Микросервис", "Управление доступом через домофон. Проверяет токен, роль, статус услуги.")
+    Container(tenant_parking, "tenant-parking-app", "Микросервис", "Управление парковкой. Проверяет токен, роль, статус услуги.")
+    Container(vault, "HashiCorp Vault", "Секретное хранилище", "Хранение учётных данных для интеграции")
+    Container(db_intercom, "БД tenant-intercom-app", "PostgreSQL", "Хранит ID пользователя, статус услуги, историю распознаваний")
+    Container(db_parking, "БД tenant-parking-app", "PostgreSQL", "Хранит привязку гос. номеров к ID пользователя")
+}
+
+System_Ext(external_intercom, "Внешний сервис домофона", "Обработка вызовов, распознавание лиц")
+System_Ext(external_parking, "Внешний сервис парковки", "Управление шлагбаумами, распознавание номеров")
+
+Rel(user, tenant_intercom, "HTTPS + JWT", "Авторизованный запрос")
+Rel(user, tenant_parking, "HTTPS + JWT", "Авторизованный запрос")
+
+Rel(tenant_intercom, vault, "Чтение creds", "HTTPS")
+Rel(tenant_parking, vault, "Чтение creds", "HTTPS")
+
+Rel(tenant_intercom, external_intercom, "HTTPS", "Вызов API (с тех. учётной записью)")
+Rel(tenant_parking, external_parking, "HTTPS", "Вызов API (с тех. учётной записью)")
+
+Rel(tenant_intercom, db_intercom, "Чтение/запись", "JDBC (шифр. соединение)")
+Rel(tenant_parking, db_parking, "Чтение/запись", "JDBC (шифр. соединение)")
+
+@enduml
