@@ -1,0 +1,13 @@
+﻿apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sales-developer-binding
+  namespace: sales
+subjects:
+  - kind: ServiceAccount
+    name: user-dev
+    namespace: sales
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: domain-developer
