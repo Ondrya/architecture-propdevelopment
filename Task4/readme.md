@@ -7,16 +7,7 @@
 Шаг 1
 
 ```bash
-# Создаст ClusterRole (глобально) и Role в sales, tenant, finance, data.
 ./scripts/01_create_roles.sh
-```
-
-Проверка
-
-```bash
-kubectl get clusterroles | grep -E 'sales|data|platform'
-kubectl get roles -n sales
-kubectl get roles -n data
 ```
 
 Шаг 2
