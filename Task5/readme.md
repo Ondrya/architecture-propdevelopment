@@ -1,11 +1,12 @@
-# Задание 5
+# Network policy
 
-Выполнить скрипт `init.sh`.
+Выполнить скрипт.
 
 ```bash
     ./init.sh
 ```
 
 ```bash
-    kubectl run test-$RANDOM --rm -i -t --image=alpine -- sh # wget -qO- --timeout=2 http://apiserver
+    kubectl run test-$RANDOM --rm -i -t --image=alpine -- sh
+    / # wget -qO- --timeout=2 http://apiserver
 ```
